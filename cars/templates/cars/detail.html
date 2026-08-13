@@ -1,0 +1,509 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ car.brand }} {{ car.model }} | CarResell</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        CarResell
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#cars">Buy Cars</a>
+        <a href="#">Sell Your Car</a>
+        <a href="#">Contact</a>
+    </div>
+
+</nav>
+
+
+<!-- ================= CAR DETAIL ================= -->
+
+<section class="cars-section">
+
+    <div class="container">
+
+        <div class="car-detail-card">
+
+            <!-- ================= IMAGE GALLERY ================= -->
+
+            <div class="gallery">
+
+                {% if car.images.all %}
+
+                    <div class="main-image-wrapper">
+
+                        <img
+                            id="mainCarImage"
+                            src="{{ car.images.first.image.url }}"
+                            alt="{{ car.brand }} {{ car.model }}"
+                            class="main-car-image"
+                        >
+
+                        {% if car.images.count > 1 %}
+
+                            <button
+                                type="button"
+                                class="gallery-btn gallery-prev"
+                                onclick="previousImage()"
+                            >
+                                ❮
+                            </button>
+
+                            <button
+                                type="button"
+                                class="gallery-btn gallery-next"
+                                onclick="nextImage()"
+                            >
+                                ❯
+                            </button>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- THUMBNAILS -->
+
+                    <div class="thumbnail-container">
+
+                        {% for image in car.images.all %}
+
+                            <img
+                                src="{{ image.image.url }}"
+                                alt="{{ car.brand }} {{ car.model }}"
+                                class="thumbnail {% if forloop.first %}active-thumbnail{% endif %}"
+                                onclick="changeImage({{ forloop.counter0 }})"
+                            >
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="no-image">
+                        No Image Available
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- ================= CAR INFORMATION ================= -->
+
+            <div class="car-content">
+
+                <!-- STATUS -->
+
+                <div class="status-badge">
+
+                    {% if car.status == "sold" %}
+
+                        🔴 Sold
+
+                    {% else %}
+
+                        🟢 Available
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- TITLE -->
+
+                <h1 class="car-title">
+                    {{ car.brand }} {{ car.model }}
+                </h1>
+
+
+                <!-- PRICE -->
+
+                <div class="price">
+                    ₹{{ car.price }}
+                </div>
+
+
+                <!-- CAR INFO -->
+
+                <div class="car-info">
+
+                    <div>
+                        📅 Year: {{ car.year }}
+                    </div>
+
+                    <div>
+                        ⛽ Fuel: {{ car.fuel }}
+                    </div>
+
+                    <div>
+                        ⚙️ Transmission: {{ car.transmission }}
+                    </div>
+
+                    <div>
+                        🛣️ {{ car.kilometers }} KM
+                    </div>
+
+                    <div>
+                        📍 {{ car.city }}
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="description">
+
+                    <h2>
+                        Description
+                    </h2>
+
+                    <p>
+                        {{ car.description }}
+                    </p>
+
+                </div>
+
+
+                <!-- ================= CONTACT SELLER ================= -->
+
+                {% if contact_success %}
+
+                    <div class="success-message">
+
+                        ✅ Your enquiry has been sent successfully!
+
+                        <br>
+
+                        The seller will contact you soon.
+
+                    </div>
+
+                {% endif %}
+
+
+                <div class="seller-actions">
+
+                    {% if car.status != "sold" %}
+
+                        <button
+                            type="button"
+                            class="contact-btn"
+                            onclick="openContactForm()"
+                        >
+                            📞 Contact Seller
+                        </button>
+
+                    {% endif %}
+
+                    <a
+                        href="/"
+                        class="view-btn"
+                    >
+                        ← Back to Cars
+                    </a>
+
+                </div>
+
+
+                <!-- ================= CONTACT FORM ================= -->
+
+                <div
+                    id="contactFormBox"
+                    class="contact-form-box"
+                >
+
+                    <div class="contact-form-header">
+
+                        <h2>
+                            Contact Seller
+                        </h2>
+
+                        <button
+                            type="button"
+                            class="close-form-btn"
+                            onclick="closeContactForm()"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+
+                    <p class="contact-form-subtitle">
+
+                        Interested in this {{ car.brand }} {{ car.model }}?
+                        Send your enquiry to the seller.
+
+                    </p>
+
+
+                    <form
+                        method="POST"
+                        action=""
+                    >
+
+                        {% csrf_token %}
+
+
+                        <!-- NAME -->
+
+                        <div class="form-group">
+
+                            <label for="name">
+                                Your Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="Enter your phone number"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                            >
+
+                        </div>
+
+
+                        <!-- MESSAGE -->
+
+                        <div class="form-group">
+
+                            <label for="message">
+                                Message
+                            </label>
+
+                            <textarea
+                                id="message"
+                                name="message"
+                                rows="5"
+                                placeholder="I am interested in this car..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- BUTTONS -->
+
+                        <div class="form-buttons">
+
+                            <button
+                                type="submit"
+                                class="submit-contact-btn"
+                            >
+                                📩 Send Enquiry
+                            </button>
+
+                            <button
+                                type="button"
+                                class="cancel-contact-btn"
+                                onclick="closeContactForm()"
+                            >
+                                Cancel
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+        <p>
+            © 2026 CarResell. All Rights Reserved.
+        </p>
+
+    </div>
+
+</footer>
+
+
+<!-- ================= GALLERY JAVASCRIPT ================= -->
+
+<script>
+
+    const carImages = [
+
+        {% for image in car.images.all %}
+
+            "{{ image.image.url }}"{% if not forloop.last %},{% endif %}
+
+        {% endfor %}
+
+    ];
+
+
+    let currentImageIndex = 0;
+
+
+    function changeImage(index) {
+
+        if (carImages.length === 0) {
+            return;
+        }
+
+        currentImageIndex = index;
+
+        document.getElementById("mainCarImage").src =
+            carImages[currentImageIndex];
+
+
+        const thumbnails =
+            document.querySelectorAll(".thumbnail");
+
+
+        thumbnails.forEach(function(thumbnail, index) {
+
+            thumbnail.classList.remove("active-thumbnail");
+
+            if (index === currentImageIndex) {
+
+                thumbnail.classList.add("active-thumbnail");
+
+            }
+
+        });
+
+    }
+
+
+    function nextImage() {
+
+        if (carImages.length === 0) {
+            return;
+        }
+
+        currentImageIndex++;
+
+        if (currentImageIndex >= carImages.length) {
+
+            currentImageIndex = 0;
+
+        }
+
+        changeImage(currentImageIndex);
+
+    }
+
+
+    function previousImage() {
+
+        if (carImages.length === 0) {
+            return;
+        }
+
+        currentImageIndex--;
+
+        if (currentImageIndex < 0) {
+
+            currentImageIndex =
+                carImages.length - 1;
+
+        }
+
+        changeImage(currentImageIndex);
+
+    }
+
+
+    /* ================= CONTACT FORM ================= */
+
+    function openContactForm() {
+
+        const form =
+            document.getElementById("contactFormBox");
+
+        form.style.display = "block";
+
+        form.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+    }
+
+
+    function closeContactForm() {
+
+        const form =
+            document.getElementById("contactFormBox");
+
+        form.style.display = "none";
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
