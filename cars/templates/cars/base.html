@@ -1,0 +1,392 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}CarResell{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="site-header">
+
+    <div class="header-top">
+
+        <div class="header-container">
+
+
+            <!-- LOGO -->
+
+            <a
+                href="{% url 'home' %}"
+                class="site-logo"
+            >
+                <span class="logo-car">Car</span><span class="logo-resell">Resell</span>
+            </a>
+
+
+            <!-- SEARCH -->
+
+            <form
+                method="GET"
+                action="{% url 'home' %}"
+                class="header-search"
+            >
+
+                <select name="condition">
+
+                    <option value="used">
+                        Used
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search cars or brands e.g. Swift, Hyundai"
+                    value="{{ request.GET.search }}"
+                >
+
+
+                <button type="submit">
+                    🔍
+                </button>
+
+            </form>
+
+
+            <!-- USER -->
+
+            <div class="header-user">
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'profile' %}"
+                        class="profile-link"
+                    >
+                        👤 Profile
+                    </a>
+
+                    <span class="wishlist-icon">
+                        ♡
+                    </span>
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="logout-link"
+                    >
+                        Logout
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'login_page' %}"
+                        class="login-link"
+                    >
+                        Login
+                    </a>
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="register-link"
+                    >
+                        Register
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         NAVIGATION
+         ================================================= -->
+
+    <nav class="main-navigation">
+
+        <div class="nav-container">
+
+
+            <div class="nav-links">
+
+                <a href="{% url 'home' %}">
+                    HOME
+                </a>
+
+                <a href="{% url 'home' %}#cars">
+                    BUY CARS
+                </a>
+
+                <a href="{% url 'sell_car' %}">
+                    SELL YOUR CAR
+                </a>
+
+                <a href="{% url 'brands' %}">
+                    BRANDS
+                </a>
+
+                <a href="{% url 'home' %}#contact">
+                    CONTACT
+                </a>
+
+            </div>
+
+
+            <div class="location">
+
+                <span>
+                    📍
+                </span>
+
+                <span>
+                    Jaipur
+                </span>
+
+                <span>
+                    ˅
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+     ===================================================== -->
+
+<main>
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+
+<!-- =====================================================
+     CONTACT
+     ===================================================== -->
+
+<section class="contact-section" id="contact">
+
+    <div class="container">
+
+        <div class="contact-box">
+
+            <div class="contact-content">
+
+                <span class="contact-label">
+                    CONTACT US
+                </span>
+
+                <h2>
+                    Have a Question?
+                </h2>
+
+                <p>
+                    Get in touch with us for car enquiries, selling your car,
+                    or any other information about CarResell.
+                </p>
+
+
+                <div class="contact-details">
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            📞
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Phone
+                            </span>
+
+                            <strong>
+                                +91 98765 43210
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            ✉
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+                                carresell@gmail.com
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="contact-item">
+
+                        <div class="contact-icon">
+                            📍
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Location
+                            </span>
+
+                            <strong>
+                                Jaipur, Rajasthan
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="contact-message">
+
+                <div class="contact-message-card">
+
+                    <span>
+                        CARRESELL
+                    </span>
+
+                    <h3>
+                        Let's talk about your next car.
+                    </h3>
+
+                    <p>
+                        Whether you want to buy or sell a car,
+                        we're here to help.
+                    </p>
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="contact-button"
+                    >
+                        Browse Cars →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    <div class="footer-container">
+
+        <div class="footer-brand">
+
+            <h2>
+                <span>Car</span>Resell
+            </h2>
+
+            <p>
+                Buy and sell quality used cars with trusted
+                vehicle listings.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'brands' %}">
+                Brands
+            </a>
+
+            <a href="{% url 'sell_car' %}">
+                Sell Your Car
+            </a>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 CarResell. All Rights Reserved.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

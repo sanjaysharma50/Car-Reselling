@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Car(models.Model):
@@ -8,9 +9,13 @@ class Car(models.Model):
         ('sold', 'Sold'),
     ]
 
-    brand = models.CharField(max_length=100)
+    brand = models.CharField(
+        max_length=100
+    )
 
-    model = models.CharField(max_length=100)
+    model = models.CharField(
+        max_length=100
+    )
 
     year = models.PositiveIntegerField()
 
@@ -35,19 +40,16 @@ class Car(models.Model):
 
     description = models.TextField()
 
-    # Available / Sold
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
         default='available'
     )
 
-    # Featured car
     is_featured = models.BooleanField(
         default=False
     )
 
-    # Seller information
     seller_name = models.CharField(
         max_length=100,
         blank=True
@@ -67,6 +69,7 @@ class Car(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.brand} {self.model}"
 
 
@@ -83,10 +86,19 @@ class CarImage(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.car.brand} {self.car.model} Image"
 
 
 class SellRequest(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='sell_requests'
+    )
 
     name = models.CharField(
         max_length=100
@@ -130,6 +142,7 @@ class SellRequest(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.name} - {self.brand} {self.model}"
 
 
@@ -162,4 +175,6 @@ class ContactRequest(models.Model):
     )
 
     def __str__(self):
+
         return f"{self.name} - {self.car.brand} {self.car.model}"
+        

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CarResell - Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #182238;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 82px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid #e9edf5;
+        }
+
+        .logo {
+            text-decoration: none;
+            font-size: 32px;
+            font-weight: 800;
+            color: #4438f5;
+            position: relative;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -9px;
+            width: 32px;
+            height: 4px;
+            background: #f59e0b;
+            border-radius: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #202a3d;
+            font-size: 16px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #4438f5;
+        }
+
+        /* =========================
+           LOGIN SECTION
+        ========================= */
+
+        .login-section {
+            min-height: calc(100vh - 82px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            background:
+                radial-gradient(
+                    circle at top left,
+                    rgba(68, 56, 245, 0.10),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at bottom right,
+                    rgba(245, 158, 11, 0.08),
+                    transparent 30%
+                ),
+                #f5f7fb;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 1050px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(24, 34, 56, 0.12);
+        }
+
+        /* =========================
+           LEFT SIDE
+        ========================= */
+
+        .login-info {
+            background: linear-gradient(
+                135deg,
+                #312e81,
+                #4438f5 55%,
+                #5b50f6
+            );
+            color: #ffffff;
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-badge {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            padding: 9px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .login-info h1 {
+            font-size: 48px;
+            line-height: 1.08;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .login-info h1 span {
+            color: #fbbf24;
+        }
+
+        .login-info p {
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 450px;
+            margin-bottom: 30px;
+        }
+
+        .benefits {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .benefits li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .check {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fbbf24;
+            font-weight: 800;
+        }
+
+        /* =========================
+           RIGHT LOGIN CARD
+        ========================= */
+
+        .login-card {
+            padding: 60px 55px;
+            background: #ffffff;
+        }
+
+        .login-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: #eef0ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 22px;
+        }
+
+        .login-card h2 {
+            font-size: 34px;
+            margin-bottom: 9px;
+            color: #182238;
+        }
+
+        .login-subtitle {
+            color: #718096;
+            font-size: 15px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error-message {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 13px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 21px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #253047;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 52px;
+            border: 1px solid #d8deea;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 15px;
+            outline: none;
+            color: #182238;
+            background: #ffffff;
+            transition: 0.2s ease;
+        }
+
+        .form-group input:focus {
+            border-color: #4438f5;
+            box-shadow: 0 0 0 4px rgba(68, 56, 245, 0.10);
+        }
+
+        .login-button {
+            width: 100%;
+            height: 54px;
+            border: none;
+            border-radius: 12px;
+            background: #4438f5;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.2s ease;
+        }
+
+        .login-button:hover {
+            background: #3730a3;
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0;
+            color: #9aa4b5;
+            font-size: 13px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e5e9f1;
+        }
+
+        .register-text {
+            text-align: center;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .register-text a {
+            color: #4438f5;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .back-home a {
+            text-decoration: none;
+            color: #64748b;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .back-home a:hover {
+            color: #4438f5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .navbar {
+                padding: 0 25px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+            }
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+
+            .login-info {
+                padding: 45px 35px;
+            }
+
+            .login-info h1 {
+                font-size: 38px;
+            }
+
+            .login-card {
+                padding: 45px 35px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                height: auto;
+                min-height: 75px;
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 18px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .login-section {
+                padding: 30px 15px;
+            }
+
+            .login-info {
+                padding: 35px 25px;
+            }
+
+            .login-info h1 {
+                font-size: 34px;
+            }
+
+            .login-card {
+                padding: 35px 25px;
+            }
+
+            .login-card h2 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            CarResell
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/#cars">Buy Cars</a>
+            <a href="/sell/">Sell Your Car</a>
+            <a href="/#how-it-works">How It Works</a>
+            <a href="/#contact">Contact</a>
+            <a href="/login/">Login</a>
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         LOGIN
+    ========================= -->
+
+    <main class="login-section">
+
+        <div class="login-wrapper">
+
+            <!-- LEFT -->
+
+            <section class="login-info">
+
+                <div class="info-badge">
+                    🚗 TRUSTED PRE-OWNED CARS
+                </div>
+
+                <h1>
+                    Welcome Back to
+                    <span>CarResell</span>
+                </h1>
+
+                <p>
+                    Login to your CarResell account and continue
+                    your car buying or selling journey with ease.
+                </p>
+
+                <ul class="benefits">
+
+                    <li>
+                        <span class="check">✓</span>
+                        Browse quality pre-owned cars
+                    </li>
+
+                    <li>
+                        <span class="check">✓</span>
+                        Sell your car easily
+                    </li>
+
+                    <li>
+                        <span class="check">✓</span>
+                        Simple and transparent process
+                    </li>
+
+                </ul>
+
+            </section>
+
+
+            <!-- RIGHT -->
+
+            <section class="login-card">
+
+                <div class="login-icon">
+                    🔐
+                </div>
+
+                <h2>
+                    Login
+                </h2>
+
+                <p class="login-subtitle">
+                    Enter your account details to continue.
+                </p>
+
+
+                {% if error %}
+
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+
+                {% endif %}
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="next"
+                        value="{{ request.GET.next }}"
+                    >
+
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            required
+                            autocomplete="username"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                            autocomplete="current-password"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="login-button"
+                    >
+                        Login to CarResell
+                    </button>
+
+                </form>
+
+
+                <div class="divider">
+                    OR
+                </div>
+
+
+                <p class="register-text">
+                    Don't have an account?
+                    <a href="/register/">
+                        Create Account
+                    </a>
+                </p>
+
+
+                <div class="back-home">
+                    <a href="/">
+                        ← Back to Home
+                    </a>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

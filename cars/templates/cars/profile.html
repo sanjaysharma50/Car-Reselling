@@ -1,0 +1,183 @@
+{% extends "cars/base.html" %}
+
+{% block title %}
+    My Profile - CarResell
+{% endblock %}
+
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="container">
+
+        <div class="profile-header">
+
+            <span>
+                ACCOUNT
+            </span>
+
+            <h1>
+                My Profile
+            </h1>
+
+            <p>
+                View your CarResell account information.
+            </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <!-- PROFILE TOP -->
+
+            <div class="profile-top">
+
+                <div class="profile-avatar">
+                    {{ profile_user.username|slice:":1"|upper }}
+                </div>
+
+                <div class="profile-name">
+
+                    <h2>
+                        {% if profile_user.first_name %}
+                            {{ profile_user.first_name }}
+                            {{ profile_user.last_name }}
+                        {% else %}
+                            {{ profile_user.username }}
+                        {% endif %}
+                    </h2>
+
+                    <p>
+                        @{{ profile_user.username }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="profile-info">
+
+                <div class="profile-info-item">
+
+                    <span>
+                        USERNAME
+                    </span>
+
+                    <strong>
+                        {{ profile_user.username }}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-info-item">
+
+                    <span>
+                        EMAIL
+                    </span>
+
+                    <strong>
+                        {% if profile_user.email %}
+                            {{ profile_user.email }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-info-item">
+
+                    <span>
+                        FIRST NAME
+                    </span>
+
+                    <strong>
+                        {% if profile_user.first_name %}
+                            {{ profile_user.first_name }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-info-item">
+
+                    <span>
+                        LAST NAME
+                    </span>
+
+                    <strong>
+                        {% if profile_user.last_name %}
+                            {{ profile_user.last_name }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-info-item">
+
+                    <span>
+                        ACCOUNT STATUS
+                    </span>
+
+                    <strong class="profile-active">
+                        ✓ Active
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-info-item">
+
+                    <span>
+                        MEMBER SINCE
+                    </span>
+
+                    <strong>
+                        {{ profile_user.date_joined|date:"d M Y" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="profile-actions">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="profile-home-button"
+                >
+                    ← Back to Home
+                </a>
+
+                <a
+                    href="{% url 'logout' %}"
+                    class="profile-logout-button"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

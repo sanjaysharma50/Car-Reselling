@@ -1,0 +1,171 @@
+{% extends "cars/base.html" %}
+
+{% block title %}
+    {{ brand }} Cars - CarResell
+{% endblock %}
+
+{% block content %}
+
+<section class="brand-cars-page">
+
+    <div class="container">
+
+        <!-- Back -->
+        <div class="brand-cars-back">
+            <a href="{% url 'brands' %}">
+                ← Back to Brands
+            </a>
+        </div>
+
+
+        <!-- Header -->
+        <div class="brand-cars-header">
+
+            <span>EXPLORE {{ brand|upper }}</span>
+
+            <h1>{{ brand }} Cars</h1>
+
+            <p>
+                Explore available used {{ brand }} cars.
+            </p>
+
+        </div>
+
+
+        <!-- Cars -->
+        {% if cars %}
+
+            <div class="brand-cars-count">
+                <strong>{{ cars|length }}</strong>
+                cars available
+            </div>
+
+
+            <div class="brand-cars-grid">
+
+                {% for car in cars %}
+
+                    <article class="brand-car-card">
+
+                        <!-- Image -->
+                        <div class="brand-car-image">
+
+                            {% with first_image=car.images.first %}
+
+                                {% if first_image %}
+
+                                    <img
+                                        src="{{ first_image.image.url }}"
+                                        alt="{{ car.brand }} {{ car.model }}"
+                                    >
+
+                                {% else %}
+
+                                    <div class="brand-car-no-image">
+                                        🚗
+                                        <span>No Image</span>
+                                    </div>
+
+                                {% endif %}
+
+                            {% endwith %}
+
+
+                            {% if car.is_featured %}
+                                <span class="brand-car-featured">
+                                    ★ Featured
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- Details -->
+                        <div class="brand-car-body">
+
+                            <div class="brand-car-title-row">
+
+                                <h2>
+                                    {{ car.brand }} {{ car.model }}
+                                </h2>
+
+                                <span>
+                                    {{ car.year }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="brand-car-price">
+                                ₹{{ car.price }}
+                            </div>
+
+
+                            <div class="brand-car-specs">
+
+                                <span>
+                                    {{ car.kilometers }} km
+                                </span>
+
+                                <span>
+                                    {{ car.transmission }}
+                                </span>
+
+                                <span>
+                                    {{ car.fuel }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="brand-car-footer">
+
+                                <span>
+                                    📍 {{ car.city }}
+                                </span>
+
+                                <a href="{% url 'car_detail' car.id %}">
+                                    View Details →
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- Empty -->
+            <div class="brand-cars-empty">
+
+                <div class="brand-empty-icon">
+                    🚗
+                </div>
+
+                <h2>
+                    No {{ brand }} Cars Available
+                </h2>
+
+                <p>
+                    There are currently no available cars from this brand.
+                </p>
+
+                <a href="{% url 'brands' %}">
+                    ← Browse Other Brands
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

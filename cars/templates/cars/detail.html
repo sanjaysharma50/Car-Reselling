@@ -1,126 +1,192 @@
-{% load static %}
+{% extends "cars/base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}
+    {{ car.brand }} {{ car.model }} - CarResell
+{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block content %}
 
-    <title>{{ car.brand }} {{ car.model }} | CarResell</title>
-
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-
-<body>
-
-<!-- ================= NAVBAR ================= -->
-
-<nav class="navbar">
-
-    <div class="logo">
-        CarResell
-    </div>
-
-    <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/#cars">Buy Cars</a>
-        <a href="#">Sell Your Car</a>
-        <a href="#">Contact</a>
-    </div>
-
-</nav>
-
-
-<!-- ================= CAR DETAIL ================= -->
-
-<section class="cars-section">
+<section class="detail-page">
 
     <div class="container">
 
-        <div class="car-detail-card">
+        <!-- BACK -->
+        <div class="detail-back">
+            <a href="{% url 'home' %}">
+                ← Back to Cars
+            </a>
+        </div>
 
-            <!-- ================= IMAGE GALLERY ================= -->
 
-            <div class="gallery">
+        <div class="premium-detail-card">
+
+            <!-- =========================================
+                 LEFT SIDE
+                 ========================================= -->
+
+            <div class="premium-left">
+
+                <!-- MAIN IMAGE -->
+
+                {% with first_image=car.images.first %}
+
+                    {% if first_image %}
+
+                        <div class="premium-main-image">
+
+                            <img
+                                src="{{ first_image.image.url }}"
+                                alt="{{ car.brand }} {{ car.model }}"
+                            >
+
+                            {% if car.is_featured %}
+                                <span class="premium-image-badge">
+                                    ★ Featured
+                                </span>
+                            {% endif %}
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="premium-main-image premium-no-image">
+                            <span>🚗</span>
+                            <p>No Image Available</p>
+                        </div>
+
+                    {% endif %}
+
+                {% endwith %}
+
+
+                <!-- THUMBNAILS -->
 
                 {% if car.images.all %}
 
-                    <div class="main-image-wrapper">
-
-                        <img
-                            id="mainCarImage"
-                            src="{{ car.images.first.image.url }}"
-                            alt="{{ car.brand }} {{ car.model }}"
-                            class="main-car-image"
-                        >
-
-                        {% if car.images.count > 1 %}
-
-                            <button
-                                type="button"
-                                class="gallery-btn gallery-prev"
-                                onclick="previousImage()"
-                            >
-                                ❮
-                            </button>
-
-                            <button
-                                type="button"
-                                class="gallery-btn gallery-next"
-                                onclick="nextImage()"
-                            >
-                                ❯
-                            </button>
-
-                        {% endif %}
-
-                    </div>
-
-
-                    <!-- THUMBNAILS -->
-
-                    <div class="thumbnail-container">
+                    <div class="premium-thumbnails">
 
                         {% for image in car.images.all %}
 
-                            <img
-                                src="{{ image.image.url }}"
-                                alt="{{ car.brand }} {{ car.model }}"
-                                class="thumbnail {% if forloop.first %}active-thumbnail{% endif %}"
-                                onclick="changeImage({{ forloop.counter0 }})"
-                            >
+                            <div class="premium-thumbnail">
+
+                                <img
+                                    src="{{ image.image.url }}"
+                                    alt="{{ car.brand }} {{ car.model }}"
+                                >
+
+                            </div>
 
                         {% endfor %}
 
                     </div>
 
-                {% else %}
+                {% endif %}
 
-                    <div class="no-image">
-                        No Image Available
+
+                <!-- VEHICLE OVERVIEW -->
+
+                <div class="vehicle-overview">
+
+                    <div class="overview-heading">
+
+                        <div>
+                            <span>
+                                CAR DETAILS
+                            </span>
+
+                            <h2>
+                                Vehicle Overview
+                            </h2>
+                        </div>
+
+                        <div class="overview-icon">
+                            🚘
+                        </div>
+
                     </div>
 
-                {% endif %}
+
+                    <div class="overview-line">
+
+                        <div>
+                            <small>Brand</small>
+                            <strong>{{ car.brand }}</strong>
+                        </div>
+
+                        <div>
+                            <small>Model</small>
+                            <strong>{{ car.model }}</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-line">
+
+                        <div>
+                            <small>Year</small>
+                            <strong>{{ car.year }}</strong>
+                        </div>
+
+                        <div>
+                            <small>Location</small>
+                            <strong>{{ car.city }}</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-line">
+
+                        <div>
+                            <small>Fuel Type</small>
+                            <strong>{{ car.fuel }}</strong>
+                        </div>
+
+                        <div>
+                            <small>Transmission</small>
+                            <strong>{{ car.transmission }}</strong>
+                        </div>
+
+                    </div>
+
+
+                    <div class="overview-bottom">
+
+                        <span>
+                            ✓ Quality Listing
+                        </span>
+
+                        <span>
+                            ✓ Available Now
+                        </span>
+
+                    </div>
+
+                </div>
 
             </div>
 
 
-            <!-- ================= CAR INFORMATION ================= -->
+            <!-- =========================================
+                 RIGHT SIDE
+                 ========================================= -->
 
-            <div class="car-content">
+            <div class="premium-right">
 
                 <!-- STATUS -->
 
-                <div class="status-badge">
+                <div class="premium-top">
 
-                    {% if car.status == "sold" %}
+                    <span class="premium-status">
+                        {{ car.status|title }}
+                    </span>
 
-                        🔴 Sold
+                    {% if car.is_featured %}
 
-                    {% else %}
-
-                        🟢 Available
+                        <span class="premium-featured">
+                            ★ Featured
+                        </span>
 
                     {% endif %}
 
@@ -129,40 +195,68 @@
 
                 <!-- TITLE -->
 
-                <h1 class="car-title">
+                <h1 class="premium-title">
                     {{ car.brand }} {{ car.model }}
                 </h1>
 
 
+                <div class="premium-location">
+                    📍 {{ car.city }}
+                </div>
+
+
                 <!-- PRICE -->
 
-                <div class="price">
+                <div class="premium-price">
                     ₹{{ car.price }}
                 </div>
 
 
-                <!-- CAR INFO -->
+                <!-- QUICK SPECS -->
 
-                <div class="car-info">
+                <div class="premium-specs">
 
-                    <div>
-                        📅 Year: {{ car.year }}
+                    <div class="premium-spec">
+
+                        <span>YEAR</span>
+
+                        <strong>
+                            {{ car.year }}
+                        </strong>
+
                     </div>
 
-                    <div>
-                        ⛽ Fuel: {{ car.fuel }}
+
+                    <div class="premium-spec">
+
+                        <span>KILOMETERS</span>
+
+                        <strong>
+                            {{ car.kilometers }} km
+                        </strong>
+
                     </div>
 
-                    <div>
-                        ⚙️ Transmission: {{ car.transmission }}
+
+                    <div class="premium-spec">
+
+                        <span>FUEL</span>
+
+                        <strong>
+                            {{ car.fuel }}
+                        </strong>
+
                     </div>
 
-                    <div>
-                        🛣️ {{ car.kilometers }} KM
-                    </div>
 
-                    <div>
-                        📍 {{ car.city }}
+                    <div class="premium-spec">
+
+                        <span>TRANSMISSION</span>
+
+                        <strong>
+                            {{ car.transmission }}
+                        </strong>
+
                     </div>
 
                 </div>
@@ -170,194 +264,133 @@
 
                 <!-- DESCRIPTION -->
 
-                <div class="description">
+                {% if car.description %}
 
-                    <h2>
-                        Description
-                    </h2>
+                    <div class="premium-description">
 
-                    <p>
-                        {{ car.description }}
-                    </p>
+                        <span>
+                            ABOUT THIS CAR
+                        </span>
 
-                </div>
+                        <h2>
+                            A car worth taking a closer look at.
+                        </h2>
 
-
-                <!-- ================= CONTACT SELLER ================= -->
-
-                {% if contact_success %}
-
-                    <div class="success-message">
-
-                        ✅ Your enquiry has been sent successfully!
-
-                        <br>
-
-                        The seller will contact you soon.
+                        <p>
+                            {{ car.description }}
+                        </p>
 
                     </div>
 
                 {% endif %}
 
 
-                <div class="seller-actions">
+                <!-- ENQUIRY -->
 
-                    {% if car.status != "sold" %}
+                <div class="premium-enquiry">
 
-                        <button
-                            type="button"
-                            class="contact-btn"
-                            onclick="openContactForm()"
-                        >
-                            📞 Contact Seller
-                        </button>
+                    <div class="enquiry-heading">
 
-                    {% endif %}
+                        <div>
 
-                    <a
-                        href="/"
-                        class="view-btn"
-                    >
-                        ← Back to Cars
-                    </a>
+                            <span>
+                                INTERESTED?
+                            </span>
 
-                </div>
+                            <h2>
+                                Get in touch with the seller
+                            </h2>
 
+                        </div>
 
-                <!-- ================= CONTACT FORM ================= -->
-
-                <div
-                    id="contactFormBox"
-                    class="contact-form-box"
-                >
-
-                    <div class="contact-form-header">
-
-                        <h2>
-                            Contact Seller
-                        </h2>
-
-                        <button
-                            type="button"
-                            class="close-form-btn"
-                            onclick="closeContactForm()"
-                        >
-                            ×
-                        </button>
+                        <div class="enquiry-icon">
+                            ✉
+                        </div>
 
                     </div>
 
 
-                    <p class="contact-form-subtitle">
-
-                        Interested in this {{ car.brand }} {{ car.model }}?
-                        Send your enquiry to the seller.
-
-                    </p>
-
-
-                    <form
-                        method="POST"
-                        action=""
-                    >
+                    <form method="POST">
 
                         {% csrf_token %}
 
 
-                        <!-- NAME -->
-
-                        <div class="form-group">
-
-                            <label for="name">
-                                Your Name
-                            </label>
-
-                            <input
-                                type="text"
-                                id="name"
-                                name="name"
-                                placeholder="Enter your name"
-                                required
-                            >
-
-                        </div>
+                        <div class="premium-form-grid">
 
 
-                        <!-- PHONE -->
+                            <div class="premium-form-group">
 
-                        <div class="form-group">
+                                <label>
+                                    Your Name
+                                </label>
 
-                            <label for="phone">
-                                Phone Number
-                            </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Enter your name"
+                                    required
+                                >
 
-                            <input
-                                type="tel"
-                                id="phone"
-                                name="phone"
-                                placeholder="Enter your phone number"
-                                required
-                            >
-
-                        </div>
+                            </div>
 
 
-                        <!-- EMAIL -->
+                            <div class="premium-form-group">
 
-                        <div class="form-group">
+                                <label>
+                                    Phone Number
+                                </label>
 
-                            <label for="email">
-                                Email Address
-                            </label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Enter phone number"
+                                    required
+                                >
 
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="Enter your email"
-                            >
-
-                        </div>
+                            </div>
 
 
-                        <!-- MESSAGE -->
+                            <div class="premium-form-group full">
 
-                        <div class="form-group">
+                                <label>
+                                    Email Address
+                                </label>
 
-                            <label for="message">
-                                Message
-                            </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Enter your email"
+                                    required
+                                >
 
-                            <textarea
-                                id="message"
-                                name="message"
-                                rows="5"
-                                placeholder="I am interested in this car..."
-                            ></textarea>
+                            </div>
+
+
+                            <div class="premium-form-group full">
+
+                                <label>
+                                    Message
+                                </label>
+
+                                <textarea
+                                    name="message"
+                                    rows="3"
+                                    placeholder="I'm interested in this car..."
+                                    required
+                                ></textarea>
+
+                            </div>
 
                         </div>
 
 
-                        <!-- BUTTONS -->
-
-                        <div class="form-buttons">
-
-                            <button
-                                type="submit"
-                                class="submit-contact-btn"
-                            >
-                                📩 Send Enquiry
-                            </button>
-
-                            <button
-                                type="button"
-                                class="cancel-contact-btn"
-                                onclick="closeContactForm()"
-                            >
-                                Cancel
-                            </button>
-
-                        </div>
+                        <button
+                            type="submit"
+                            class="premium-submit"
+                        >
+                            Send Enquiry
+                            <span>→</span>
+                        </button>
 
                     </form>
 
@@ -371,139 +404,4 @@
 
 </section>
 
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-    <div class="footer-content">
-
-        <p>
-            © 2026 CarResell. All Rights Reserved.
-        </p>
-
-    </div>
-
-</footer>
-
-
-<!-- ================= GALLERY JAVASCRIPT ================= -->
-
-<script>
-
-    const carImages = [
-
-        {% for image in car.images.all %}
-
-            "{{ image.image.url }}"{% if not forloop.last %},{% endif %}
-
-        {% endfor %}
-
-    ];
-
-
-    let currentImageIndex = 0;
-
-
-    function changeImage(index) {
-
-        if (carImages.length === 0) {
-            return;
-        }
-
-        currentImageIndex = index;
-
-        document.getElementById("mainCarImage").src =
-            carImages[currentImageIndex];
-
-
-        const thumbnails =
-            document.querySelectorAll(".thumbnail");
-
-
-        thumbnails.forEach(function(thumbnail, index) {
-
-            thumbnail.classList.remove("active-thumbnail");
-
-            if (index === currentImageIndex) {
-
-                thumbnail.classList.add("active-thumbnail");
-
-            }
-
-        });
-
-    }
-
-
-    function nextImage() {
-
-        if (carImages.length === 0) {
-            return;
-        }
-
-        currentImageIndex++;
-
-        if (currentImageIndex >= carImages.length) {
-
-            currentImageIndex = 0;
-
-        }
-
-        changeImage(currentImageIndex);
-
-    }
-
-
-    function previousImage() {
-
-        if (carImages.length === 0) {
-            return;
-        }
-
-        currentImageIndex--;
-
-        if (currentImageIndex < 0) {
-
-            currentImageIndex =
-                carImages.length - 1;
-
-        }
-
-        changeImage(currentImageIndex);
-
-    }
-
-
-    /* ================= CONTACT FORM ================= */
-
-    function openContactForm() {
-
-        const form =
-            document.getElementById("contactFormBox");
-
-        form.style.display = "block";
-
-        form.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-    }
-
-
-    function closeContactForm() {
-
-        const form =
-            document.getElementById("contactFormBox");
-
-        form.style.display = "none";
-
-    }
-
-</script>
-
-
-</body>
-
-</html>
+{% endblock %}

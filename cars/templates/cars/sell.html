@@ -1,0 +1,299 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sell Your Car - CarResell</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+    <style>
+        .sell-container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 30px;
+        }
+
+        .sell-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sell-form {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 700px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .sell-container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sell-container">
+
+        <div class="sell-title">
+            <h1>Sell Your Car</h1>
+            <p>Fill in your car details and we will receive your request.</p>
+        </div>
+
+        {% if sell_success %}
+            <div class="success-message">
+                <strong>Success!</strong>
+                Your car selling request has been submitted successfully.
+            </div>
+        {% endif %}
+
+        <form method="POST" class="sell-form">
+
+            {% csrf_token %}
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter phone number"
+                        required
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email"
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="brand">Car Brand *</label>
+
+                    <input
+                        type="text"
+                        id="brand"
+                        name="brand"
+                        placeholder="e.g. Maruti Suzuki"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="model">Car Model *</label>
+
+                    <input
+                        type="text"
+                        id="model"
+                        name="model"
+                        placeholder="e.g. Swift"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="year">Year *</label>
+
+                    <input
+                        type="number"
+                        id="year"
+                        name="year"
+                        placeholder="e.g. 2022"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="kilometers">Kilometers Driven *</label>
+
+                    <input
+                        type="number"
+                        id="kilometers"
+                        name="kilometers"
+                        placeholder="e.g. 35000"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label for="city">City *</label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="e.g. Jaipur"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="expected_price">
+                        Expected Price *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="expected_price"
+                        name="expected_price"
+                        placeholder="e.g. 650000"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="description">
+                    Car Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Tell us about your car..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-btn">
+                Submit Car
+            </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

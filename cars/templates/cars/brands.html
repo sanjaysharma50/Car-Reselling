@@ -1,0 +1,97 @@
+{% extends "cars/base.html" %}
+
+{% block title %}
+    Car Brands - CarResell
+{% endblock %}
+
+{% block content %}
+
+<section class="brands-page">
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="brands-header">
+            <span class="brands-label">EXPLORE BRANDS</span>
+
+            <h1>Popular Car Brands</h1>
+
+            <p>
+                Explore used cars from different manufacturers and
+                find the right car for you.
+            </p>
+        </div>
+
+
+        <!-- Brand Grid -->
+        <div class="brands-grid">
+
+            {% for item in brands %}
+
+                <a href="{% url 'brand_cars' item.name %}" class="brand-card">
+
+                    <div class="brand-icon">
+                        {{ item.name|slice:":1"|upper }}
+                    </div>
+
+                    <div class="brand-info">
+                        <h2>{{ item.name }}</h2>
+
+                        <span>
+                            {{ item.count }}
+                            {% if item.count == 1 %}
+                                Car
+                            {% else %}
+                                Cars
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="brand-arrow">
+                        →
+                    </div>
+
+                </a>
+
+            {% empty %}
+
+                <div class="brands-empty">
+                    <div>🚗</div>
+                    <h2>No Brands Available</h2>
+                    <p>
+                        There are currently no car brands available.
+                    </p>
+
+                    <a href="{% url 'home' %}">
+                        Browse Cars →
+                    </a>
+                </div>
+
+            {% endfor %}
+
+
+            <!-- All Brands -->
+            <a href="{% url 'home' %}" class="brand-card all-brands-card">
+
+                <div class="brand-icon all-brands-icon">
+                    ✓
+                </div>
+
+                <div class="brand-info">
+                    <h2>All Brands</h2>
+                    <span>Explore all cars</span>
+                </div>
+
+                <div class="brand-arrow">
+                    →
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
